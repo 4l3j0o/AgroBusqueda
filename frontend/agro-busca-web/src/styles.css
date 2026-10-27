@@ -1,0 +1,96 @@
+@import 'leaflet/dist/leaflet.css';
+
+:root {
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  --color-primary: #581845;
+  --color-primary-light: #7b2cbf;
+  --color-primary-soft: #f4ecf7;
+  
+  --color-accent: #2d6a4f;
+  --color-accent-light: #52b788;
+  --color-accent-soft: #e8f5e9;
+  
+  --color-gold: #d4a373;
+  --color-gold-soft: #fefae0;
+
+  --color-bg: #fcfbf9;
+  --color-surface: #ffffff;
+  --color-surface-hover: #faf8f5;
+  
+  --color-text-main: #1f2421;
+  --color-text-muted: #5c6761;
+  --color-text-light: #8d99ae;
+  
+  --color-border: #e9e5de;
+  --color-border-hover: #c9c3b8;
+
+  --color-warning-bg: #fff8e6;
+  --color-warning-border: #ffd166;
+  --color-warning-text: #7f5500;
+
+  --shadow-sm: 0 2px 8px rgba(31, 36, 33, 0.04);
+  --shadow-md: 0 8px 24px rgba(88, 24, 69, 0.06);
+  --shadow-lg: 0 16px 40px rgba(88, 24, 69, 0.1);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-main);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition);
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+}
+
+a {
+  color: var(--color-primary-light);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}

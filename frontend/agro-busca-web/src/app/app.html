@@ -1,0 +1,786 @@
+<div class="agro-app">
+  
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand" (click)="cambiarPestana('inicio')" role="button" tabindex="0">
+        <span class="brand-logo">🍇</span>
+        <div class="brand-text">
+          <span class="brand-name">AgroBusca</span>
+          <span class="brand-sub">Vitícola • Tarija</span>
+        </div>
+      </div>
+
+      <nav class="header-nav">
+        <button 
+          class="nav-link" 
+          [class.active]="pestanaActiva === 'inicio'"
+          (click)="cambiarPestana('inicio')">
+          Inicio
+        </button>
+        <button 
+          class="nav-link" 
+          [class.active]="pestanaActiva === 'busqueda'"
+          (click)="cambiarPestana('busqueda')">
+          Buscador IA
+        </button>
+        <button 
+          class="nav-link" 
+          [class.active]="pestanaActiva === 'fichas'"
+          (click)="cambiarPestana('fichas')">
+          Fichas Técnicas
+        </button>
+        <button 
+          class="nav-link" 
+          [class.active]="pestanaActiva === 'parcelas'"
+          (click)="cambiarPestana('parcelas')">
+          Diseñador de Parcelas
+        </button>
+        <button 
+          class="nav-link" 
+          [class.active]="pestanaActiva === 'documentos'"
+          (click)="cambiarPestana('documentos')">
+          Corpus & Datos
+        </button>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-indicator" [class.online]="backendOnline"></span>
+        <span class="status-label">Sistema en línea</span>
+      </div>
+    </div>
+  </header>
+
+  
+  <main class="main-content">
+
+    
+    
+    
+    <section *ngIf="pestanaActiva === 'inicio'" class="view-landing animate-fade">
+      
+      
+      <div class="hero-minimal">
+        <div class="hero-pill">
+          Valle Central de Tarija • 1,700 - 2,200 msnm
+        </div>
+        <h1 class="hero-title">
+          Inteligencia agronómica y <br />diseño de viñedos para Tarija.
+        </h1>
+        <p class="hero-lead">
+          Respuestas técnicas con IA generativa (RAG) sobre fuentes de CENAVIT e INIAF, combinadas con trazado topológico de espalderas y cepas en mapa satelital.
+        </p>
+
+        
+        <div class="hero-search-box">
+          <input 
+            type="text" 
+            [(ngModel)]="pregunta" 
+            (keyup.enter)="lanzarBusquedaRapida(pregunta)"
+            placeholder="Pregunta en lenguaje natural (ej. 'las hojas de la vid se ponen amarillas')..." 
+            class="hero-search-input" />
+          <button 
+            class="btn-hero-search" 
+            (click)="lanzarBusquedaRapida(pregunta)">
+            Buscar con IA →
+          </button>
+        </div>
+
+        
+        <div class="hero-tags">
+          <span class="tags-prefix">Consultas rápidas:</span>
+          <button class="tag-pill" (click)="lanzarBusquedaRapida('las hojas de la vid se ponen amarillas')">
+            Clorosis férrica
+          </button>
+          <button class="tag-pill" (click)="lanzarBusquedaRapida('polvillo blanco ceniciento en las hojas y racimos')">
+            Oídio / Cenicilla
+          </button>
+          <button class="tag-pill" (click)="lanzarBusquedaRapida('poda en espaldera para uva Moscatel de Alejandría')">
+            Poda Moscatel
+          </button>
+          <button class="tag-pill" (click)="lanzarBusquedaRapida('riego por goteo y estrés hídrico en época de maduración')">
+            Riego RDI
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="modules-grid">
+        
+        <div class="module-card" (click)="cambiarPestana('busqueda')">
+          <div class="module-icon">🔍</div>
+          <h3>Buscador RAG con IA</h3>
+          <p>Consultas en lenguaje cotidiano con recuperación semántica (384d), citas oficiales y síntesis Groq acelerada.</p>
+          <span class="module-link">Abrir buscador →</span>
+        </div>
+
+        <div class="module-card" (click)="cambiarPestana('parcelas')">
+          <div class="module-icon">🗺️</div>
+          <h3>Diseñador de Parcelas</h3>
+          <p>Trazado de cuarteles en Leaflet con corte exacto de hileras, orientación solar y conteo de cepas y alambre.</p>
+          <span class="module-link">Diseñar parcela →</span>
+        </div>
+
+        <div class="module-card" (click)="cambiarPestana('fichas')">
+          <div class="module-icon">📋</div>
+          <h3>Fichas Técnicas</h3>
+          <p>Catálogo agronómico de variedades (Moscatel, Tannat), patologías (Oídio, Mildiu) y nutrición de suelos.</p>
+          <span class="module-link">Ver catálogo →</span>
+        </div>
+
+        <div class="module-card" (click)="cambiarPestana('documentos')">
+          <div class="module-icon">📚</div>
+          <h3>Corpus Técnico</h3>
+          <p>Administración y vectorización continua de documentos y boletines vitícolas en PostgreSQL local.</p>
+          <span class="module-link">Gestionar datos →</span>
+        </div>
+
+      </div>
+
+      
+      <div class="workflow-strip">
+        <div class="strip-step">
+          <span class="step-idx">01</span>
+          <div>
+            <strong>Base Científica</strong>
+            <p>Literatura de CENAVIT e INIAF indexada en 384 dimensiones.</p>
+          </div>
+        </div>
+        <div class="strip-step">
+          <span class="step-idx">02</span>
+          <div>
+            <strong>Recuperación Coseno</strong>
+            <p>Búsqueda vectorial que identifica conceptos sin palabras exactas.</p>
+          </div>
+        </div>
+        <div class="strip-step">
+          <span class="step-idx">03</span>
+          <div>
+            <strong>Síntesis con IA</strong>
+            <p>Groq LLM formula la respuesta con citación y aviso agronómico.</p>
+          </div>
+        </div>
+        <div class="strip-step">
+          <span class="step-idx">04</span>
+          <div>
+            <strong>Planificación de Campo</strong>
+            <p>Cálculo de espalderas, cepas y materiales para el viñedo real.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    
+    
+    
+    <section *ngIf="pestanaActiva === 'busqueda'" class="view-search animate-fade">
+      
+      <div class="search-header-minimal">
+        <h2>Buscador Semántico Vitícola</h2>
+        <p>Recuperación por similitud de coseno y síntesis asistida por Groq RAG</p>
+      </div>
+
+      
+      <div class="search-bar-wrapper">
+        <input 
+          type="text" 
+          [(ngModel)]="pregunta" 
+          (keyup.enter)="ejecutarBusqueda()"
+          placeholder="Describe los síntomas, plaga, variedad o manejo que deseas consultar..." 
+          class="search-bar-input" />
+        <button 
+          class="search-bar-btn" 
+          [disabled]="cargandoBusqueda"
+          (click)="ejecutarBusqueda()">
+          <span *ngIf="!cargandoBusqueda">Buscar</span>
+          <span *ngIf="cargandoBusqueda" class="spinner-sm"></span>
+        </button>
+      </div>
+
+      
+      <div class="search-controls-minimal">
+        <div class="category-pills">
+          <button 
+            *ngFor="let cat of categorias" 
+            class="cat-pill" 
+            [class.active]="categoriaSeleccionada === cat"
+            (click)="seleccionarCategoria(cat)">
+            {{ cat }}
+          </button>
+        </div>
+
+        <label class="toggle-rag-minimal">
+          <input type="checkbox" [(ngModel)]="generarIa" />
+          <span>Síntesis Groq RAG</span>
+        </label>
+      </div>
+
+      
+      <div class="suggestions-minimal">
+        <span class="sug-caption">Ejemplos:</span>
+        <button 
+          *ngFor="let s of sugerencias" 
+          class="sug-btn" 
+          (click)="aplicarSugerencia(s)">
+          {{ s }}
+        </button>
+      </div>
+
+      
+      <div *ngIf="errorBusqueda" class="notice-box error">
+        {{ errorBusqueda }}
+      </div>
+
+      
+      <div *ngIf="cargandoBusqueda" class="loading-minimal">
+        <div class="spinner-line"></div>
+        <p>Procesando vectores semánticos y generando síntesis...</p>
+      </div>
+
+      
+      <div *ngIf="respuestaBusqueda && !cargandoBusqueda" class="search-results-wrapper animate-fade">
+        
+        
+        <div *ngIf="respuestaBusqueda.sintesisIa" class="rag-card-minimal">
+          <div class="rag-card-header">
+            <span class="rag-badge">Síntesis Asistida por IA</span>
+            <span class="rag-timing">
+              {{ respuestaBusqueda.modeloIa }} • {{ respuestaBusqueda.tiempoIaMs }} ms
+            </span>
+          </div>
+          <div class="rag-card-content">
+            <p>{{ respuestaBusqueda.sintesisIa }}</p>
+          </div>
+        </div>
+
+        
+        <div class="agronomic-alert">
+          <span class="alert-icon">⚠️</span>
+          <p>{{ respuestaBusqueda.avisoAgronomico }}</p>
+        </div>
+
+        
+        <div class="sources-container">
+          <div class="sources-title-row">
+            <h3>Fuentes Bibliográficas ({{ respuestaBusqueda.totalRecuperados }})</h3>
+            <span class="sources-meta">Tiempo total: {{ respuestaBusqueda.tiempoRespuestaMs }} ms</span>
+          </div>
+
+          <div class="sources-list">
+            <div *ngFor="let f of respuestaBusqueda.resultados" class="source-item">
+              <div class="source-item-top">
+                <span class="source-inst">{{ f.autorInstitucion }}</span>
+                <span class="source-sim">Similitud: {{ (f.similitud * 100) | number:'1.0-0' }}%</span>
+              </div>
+              <h4 class="source-title">{{ f.tituloDocumento }}</h4>
+              <span *ngIf="f.subseccion" class="source-sub">{{ f.subseccion }}</span>
+              <p class="source-body">«{{ f.contenido }}»</p>
+              <div *ngIf="f.urlFuente" class="source-link-row">
+                <a [href]="f.urlFuente" target="_blank" rel="noopener">Ver fuente original ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    
+    
+    
+    <section *ngIf="pestanaActiva === 'fichas'" class="view-fichas animate-fade">
+      
+      <div class="section-heading-row">
+        <div>
+          <h2>Fichas Técnicas Vitícolas</h2>
+          <p>Catálogo ampelográfico, fitopatológico y de manejo en los valles de Tarija</p>
+        </div>
+        <div class="heading-actions">
+          <button class="btn-subtle" (click)="inicializarFichasSemilla()">Restaurar Semillas</button>
+          <button class="btn-solid" (click)="mostrandoFormFicha = true">Nueva Ficha</button>
+        </div>
+      </div>
+
+      
+      <div class="fichas-filter-strip">
+        <input 
+          type="text" 
+          [(ngModel)]="filtroFichas.terminoBusqueda" 
+          (input)="cargarFichas()"
+          placeholder="Filtrar por síntoma, variedad, plaga o manejo..." 
+          class="filter-search-input" />
+
+        <div class="filter-type-pills">
+          <button 
+            class="pill-filter" 
+            [class.active]="!filtroFichas.tipo" 
+            (click)="filtrarFichasPorTipo('Todos')">
+            Todos
+          </button>
+          <button 
+            class="pill-filter" 
+            [class.active]="filtroFichas.tipo === 'Variedad'" 
+            (click)="filtrarFichasPorTipo('Variedad')">
+            Variedades
+          </button>
+          <button 
+            class="pill-filter" 
+            [class.active]="filtroFichas.tipo === 'Enfermedad'" 
+            (click)="filtrarFichasPorTipo('Enfermedad')">
+            Enfermedades
+          </button>
+          <button 
+            class="pill-filter" 
+            [class.active]="filtroFichas.tipo === 'NutricionSuelos'" 
+            (click)="filtrarFichasPorTipo('NutricionSuelos')">
+            Suelos y Nutrición
+          </button>
+          <button 
+            class="pill-filter" 
+            [class.active]="filtroFichas.tipo === 'Riego'" 
+            (click)="filtrarFichasPorTipo('Riego')">
+            Riego
+          </button>
+          <button 
+            class="pill-filter" 
+            [class.active]="filtroFichas.tipo === 'ManejoAgronomico'" 
+            (click)="filtrarFichasPorTipo('ManejoAgronomico')">
+            Poda y Conducción
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="cargandoFichas" class="loading-minimal">
+        <p>Cargando fichas técnicas...</p>
+      </div>
+
+      
+      <div *ngIf="!cargandoFichas" class="fichas-grid-minimal">
+        <div 
+          *ngFor="let f of fichas" 
+          class="ficha-card-minimal" 
+          (click)="verDetalleFicha(f)">
+          <div class="card-meta-top">
+            <span class="type-pill">{{ f.tipo }}</span>
+            <button class="btn-card-del" (click)="eliminarFicha(f.id, $event)" title="Eliminar">✕</button>
+          </div>
+          <h3>{{ f.titulo }}</h3>
+          <span class="card-variety">{{ f.cultivoVariedad }} • {{ f.zona }}</span>
+          <p class="card-desc">{{ f.descripcion }}</p>
+          <div class="card-meta-bottom">
+            <span>{{ f.fuentesReferencia }}</span>
+            <span class="card-arrow">Detalle →</span>
+          </div>
+        </div>
+      </div>
+
+      
+      <div *ngIf="fichaSeleccionada" class="modal-backdrop" (click)="cerrarDetalleFicha()">
+        <div class="modal-card" (click)="$event.stopPropagation()">
+          <div class="modal-top">
+            <div>
+              <span class="type-pill">{{ fichaSeleccionada.tipo }}</span>
+              <h2>{{ fichaSeleccionada.titulo }}</h2>
+              <span class="modal-sub">{{ fichaSeleccionada.cultivoVariedad }} • {{ fichaSeleccionada.zona }}</span>
+            </div>
+            <button class="btn-close-modal" (click)="cerrarDetalleFicha()">✕</button>
+          </div>
+          
+          <div class="modal-scroll-body">
+            <div class="info-section">
+              <h4>Descripción</h4>
+              <p>{{ fichaSeleccionada.descripcion }}</p>
+            </div>
+
+            <div *ngIf="fichaSeleccionada.sintomasOIdentificacion" class="info-section highlight">
+              <h4>Diagnóstico e Identificación</h4>
+              <p>{{ fichaSeleccionada.sintomasOIdentificacion }}</p>
+            </div>
+
+            <div *ngIf="fichaSeleccionada.medidasManejo" class="info-section">
+              <h4>Manejo Agronómico y Tratamiento</h4>
+              <p class="pre-line">{{ fichaSeleccionada.medidasManejo }}</p>
+            </div>
+
+            <div *ngIf="fichaSeleccionada.requerimientosEdafoclimaticos" class="info-section">
+              <h4>Requerimientos Agroclimáticos</h4>
+              <p>{{ fichaSeleccionada.requerimientosEdafoclimaticos }}</p>
+            </div>
+          </div>
+
+          <div class="modal-foot">
+            <span>Fuente: {{ fichaSeleccionada.fuentesReferencia }}</span>
+            <button class="btn-subtle" (click)="cerrarDetalleFicha()">Cerrar</button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div *ngIf="mostrandoFormFicha" class="modal-backdrop" (click)="mostrandoFormFicha = false">
+        <div class="modal-card form-card" (click)="$event.stopPropagation()">
+          <div class="modal-top">
+            <h3>Nueva Ficha Técnica</h3>
+            <button class="btn-close-modal" (click)="mostrandoFormFicha = false">✕</button>
+          </div>
+          <div class="modal-scroll-body">
+            <div class="input-field">
+              <label>Título:</label>
+              <input type="text" [(ngModel)]="nuevaFicha.titulo" placeholder="ej. Manejo de Mildiu en Brotes" />
+            </div>
+            <div class="input-grid-2">
+              <div class="input-field">
+                <label>Cultivo / Variedad:</label>
+                <input type="text" [(ngModel)]="nuevaFicha.cultivoVariedad" placeholder="ej. Moscatel de Alejandría" />
+              </div>
+              <div class="input-field">
+                <label>Tipo:</label>
+                <select [(ngModel)]="nuevaFicha.tipo">
+                  <option value="Variedad">Variedad</option>
+                  <option value="Enfermedad">Enfermedad</option>
+                  <option value="Plaga">Plaga</option>
+                  <option value="NutricionSuelos">Nutrición / Suelos</option>
+                  <option value="Riego">Riego</option>
+                  <option value="ManejoAgronomico">Manejo / Poda</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-grid-2">
+              <div class="input-field">
+                <label>Zona:</label>
+                <input type="text" [(ngModel)]="nuevaFicha.zona" placeholder="Valle de la Concepción, Uriondo" />
+              </div>
+              <div class="input-field">
+                <label>Fuente:</label>
+                <input type="text" [(ngModel)]="nuevaFicha.fuentesReferencia" placeholder="CENAVIT / INIAF" />
+              </div>
+            </div>
+            <div class="input-field">
+              <label>Descripción:</label>
+              <textarea rows="3" [(ngModel)]="nuevaFicha.descripcion"></textarea>
+            </div>
+            <div class="input-field">
+              <label>Síntomas / Identificación:</label>
+              <textarea rows="3" [(ngModel)]="nuevaFicha.sintomasOIdentificacion"></textarea>
+            </div>
+            <div class="input-field">
+              <label>Medidas de Manejo:</label>
+              <textarea rows="3" [(ngModel)]="nuevaFicha.medidasManejo"></textarea>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn-subtle" (click)="mostrandoFormFicha = false">Cancelar</button>
+            <button class="btn-solid" (click)="guardarNuevaFicha()">Guardar Ficha</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    
+    
+    
+    <section *ngIf="pestanaActiva === 'parcelas'" class="view-parcelas animate-fade">
+      
+      <div class="parcel-workspace">
+        
+        
+        <aside class="parcel-sidebar">
+          <div class="sidebar-title-area">
+            <h3>Diseñador Vitícola</h3>
+            <p>Geometría y marco de plantación</p>
+          </div>
+
+          
+          <div class="sidebar-block">
+            <span class="block-label">Cargar Cuartel de Ejemplo:</span>
+            <div class="example-pills">
+              <button 
+                *ngFor="let ex of parcelasEjemplo" 
+                class="example-pill-btn" 
+                (click)="cargarParcelaEjemplo(ex)">
+                {{ ex.nombre }}
+              </button>
+            </div>
+          </div>
+
+          
+          <div class="sidebar-block">
+            <span class="block-label">Configuración del Cuartel</span>
+            
+            <div class="sidebar-field">
+              <label>Nombre:</label>
+              <input type="text" [(ngModel)]="parametrosParcela.nombre" class="field-input-sm" />
+            </div>
+
+            <div class="sidebar-field-row">
+              <div class="sidebar-field">
+                <label>Variedad:</label>
+                <select [(ngModel)]="parametrosParcela.variedadVid" class="field-input-sm">
+                  <option value="Moscatel de Alejandría">Moscatel</option>
+                  <option value="Tannat">Tannat</option>
+                  <option value="Cabernet Sauvignon">Cabernet</option>
+                  <option value="Syrah">Syrah</option>
+                </select>
+              </div>
+              <div class="sidebar-field">
+                <label>Ubicación:</label>
+                <input type="text" [(ngModel)]="parametrosParcela.ubicacion" class="field-input-sm" />
+              </div>
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-label-row">
+                <span>Entre Hileras:</span>
+                <strong>{{ parametrosParcela.distanciaEntreFilas }} m</strong>
+              </div>
+              <input 
+                type="range" 
+                min="1.8" 
+                max="3.2" 
+                step="0.1" 
+                [(ngModel)]="parametrosParcela.distanciaEntreFilas" 
+                (change)="ejecutarCalculoParcela()" />
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-label-row">
+                <span>Entre Cepas:</span>
+                <strong>{{ parametrosParcela.distanciaEntrePlantas }} m</strong>
+              </div>
+              <input 
+                type="range" 
+                min="0.8" 
+                max="1.8" 
+                step="0.1" 
+                [(ngModel)]="parametrosParcela.distanciaEntrePlantas" 
+                (change)="ejecutarCalculoParcela()" />
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-label-row">
+                <span>Orientación:</span>
+                <strong>{{ parametrosParcela.orientacionGrados }}°</strong>
+              </div>
+              <input 
+                type="range" 
+                min="0" 
+                max="180" 
+                step="5" 
+                [(ngModel)]="parametrosParcela.orientacionGrados" 
+                (change)="ejecutarCalculoParcela()" />
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-label-row">
+                <span>Cabecera Maquinaria:</span>
+                <strong>{{ parametrosParcela.margenCabeceraMetros }} m</strong>
+              </div>
+              <input 
+                type="range" 
+                min="1.0" 
+                max="3.0" 
+                step="0.5" 
+                [(ngModel)]="parametrosParcela.margenCabeceraMetros" 
+                (change)="ejecutarCalculoParcela()" />
+            </div>
+
+            
+            <div class="draw-actions">
+              <button 
+                *ngIf="!modoDibujoActivo" 
+                class="btn-draw-mode" 
+                (click)="activarModoDibujo()">
+                ✏️ Dibujar Cuartel en Mapa
+              </button>
+              <button 
+                *ngIf="modoDibujoActivo" 
+                class="btn-draw-mode active" 
+                (click)="cerrarPoligonoManual()">
+                ✓ Finalizar ({{ verticesDibujo.length }} puntos)
+              </button>
+              <button class="btn-clear-draw" (click)="limpiarDibujo()" title="Limpiar">✕</button>
+            </div>
+
+            <button 
+              class="btn-recalc" 
+              [disabled]="calculandoParcela" 
+              (click)="ejecutarCalculoParcela()">
+              <span *ngIf="!calculandoParcela">Recalcular Viñedo</span>
+              <span *ngIf="calculandoParcela">Calculando...</span>
+            </button>
+          </div>
+
+          
+          <div *ngIf="parcelasGuardadas.length > 0" class="sidebar-block">
+            <span class="block-label">Guardadas ({{ parcelasGuardadas.length }})</span>
+            <div class="saved-compact-list">
+              <div 
+                *ngFor="let p of parcelasGuardadas" 
+                class="saved-compact-item" 
+                (click)="cargarParcelaPorId(p.id)">
+                <span>{{ p.nombre }} ({{ p.areaHectareas }} Ha)</span>
+                <button class="btn-mini-del" (click)="eliminarParcelaGuardada(p.id, $event)">✕</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        
+        <div class="parcel-map-area">
+          
+          
+          <div *ngIf="resultadoParcela" class="floating-metrics-bar animate-fade">
+            <div class="metric-pill">
+              <span class="lbl">Superficie</span>
+              <span class="val">{{ resultadoParcela.metricas.areaHectareas }} Ha</span>
+            </div>
+            <div class="metric-pill">
+              <span class="lbl">Hileras</span>
+              <span class="val">{{ resultadoParcela.metricas.totalFilas }}</span>
+            </div>
+            <div class="metric-pill">
+              <span class="lbl">Cepas</span>
+              <span class="val highlight">{{ resultadoParcela.metricas.totalPlantas | number }}</span>
+            </div>
+            <div class="metric-pill">
+              <span class="lbl">Densidad</span>
+              <span class="val">{{ resultadoParcela.metricas.densidadPlantasPorHectarea | number:'1.0-0' }} /Ha</span>
+            </div>
+            <div class="metric-pill">
+              <span class="lbl">Espaldera Total</span>
+              <span class="val">{{ resultadoParcela.metricas.longitudLinealTotalMetros | number:'1.0-0' }} m</span>
+            </div>
+            <div class="metric-pill">
+              <span class="lbl">Alambre Estimado</span>
+              <span class="val">{{ resultadoParcela.metricas.alambreEspalderaEstimadoMetros | number:'1.0-0' }} m</span>
+            </div>
+          </div>
+
+          <div id="mapa-viticola" class="leaflet-map-view"></div>
+
+          <div *ngIf="modoDibujoActivo" class="drawing-tip">
+            Haz clic en el mapa para marcar los vértices de la parcela. Luego presiona "✓ Finalizar".
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    
+    
+    
+    <section *ngIf="pestanaActiva === 'documentos'" class="view-corpus animate-fade">
+      
+      <div class="section-heading-row">
+        <div>
+          <h2>Corpus y Base de Conocimiento</h2>
+          <p>Literatura agronómica indexada y vectores de 384 dimensiones</p>
+        </div>
+        <div class="heading-actions">
+          <button class="btn-subtle" (click)="inicializarDatosSemilla()">Cargar Semillas</button>
+          <button class="btn-solid" (click)="mostrandoFormDoc = true">Subir Documento</button>
+        </div>
+      </div>
+
+      
+      <div *ngIf="estadisticas" class="stats-strip">
+        <div class="stat-box">
+          <span class="stat-val">{{ estadisticas.totalDocumentos }}</span>
+          <span class="stat-lbl">Documentos Indexados</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val">{{ estadisticas.totalFragmentosVectorizados }}</span>
+          <span class="stat-lbl">Fragmentos Vectorizados</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val-text">{{ estadisticas.zonaGeografica }}</span>
+          <span class="stat-lbl">Zona Agroclimática</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val-text">{{ estadisticas.rubroPrincipal }}</span>
+          <span class="stat-lbl">Cadena Productiva</span>
+        </div>
+      </div>
+
+      
+      <div class="table-card">
+        <table class="minimal-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Institución</th>
+              <th>Categoría</th>
+              <th>Vectores</th>
+              <th>Registro</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of documentos">
+              <td>#{{ doc.id }}</td>
+              <td>
+                <span class="tbl-doc-title">{{ doc.titulo }}</span>
+                <a *ngIf="doc.urlFuente" [href]="doc.urlFuente" target="_blank" class="tbl-doc-link">Fuente ↗</a>
+              </td>
+              <td>{{ doc.autorInstitucion }}</td>
+              <td><span class="tbl-cat-badge">{{ doc.categoria }}</span></td>
+              <td>{{ doc.cantidadFragmentos }}</td>
+              <td>{{ doc.fechaRegistro | date:'dd/MM/yyyy' }}</td>
+              <td class="tbl-actions">
+                <button class="btn-row-del" (click)="eliminarDocumento(doc.id)" title="Eliminar">✕</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      
+      <div *ngIf="mostrandoFormDoc" class="modal-backdrop" (click)="mostrandoFormDoc = false">
+        <div class="modal-card form-card" (click)="$event.stopPropagation()">
+          <div class="modal-top">
+            <h3>Subir Documento Técnico</h3>
+            <button class="btn-close-modal" (click)="mostrandoFormDoc = false">✕</button>
+          </div>
+          <div class="modal-scroll-body">
+            <div class="input-field">
+              <label>Título:</label>
+              <input type="text" [(ngModel)]="nuevoDoc.titulo" placeholder="ej. Guía de Riego para Moscatel" />
+            </div>
+            <div class="input-grid-2">
+              <div class="input-field">
+                <label>Institución:</label>
+                <input type="text" [(ngModel)]="nuevoDoc.autorInstitucion" placeholder="CENAVIT Tarija" />
+              </div>
+              <div class="input-field">
+                <label>Categoría:</label>
+                <select [(ngModel)]="nuevoDoc.categoria">
+                  <option value="Nutrición Vegetal">Nutrición Vegetal</option>
+                  <option value="Sanidad Vegetal">Sanidad Vegetal</option>
+                  <option value="Riego y Fertirriego">Riego y Fertirriego</option>
+                  <option value="Manejo del Viñedo">Manejo del Viñedo</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-field">
+              <label>Subsección:</label>
+              <input type="text" [(ngModel)]="nuevoDoc.subseccion" placeholder="ej. Protocolo de Diagnóstico" />
+            </div>
+            <div class="input-field">
+              <label>Contenido (se fragmentará y vectorizará automáticamente):</label>
+              <textarea rows="7" [(ngModel)]="nuevoDoc.contenidoCompleto" placeholder="Texto completo..."></textarea>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn-subtle" (click)="mostrandoFormDoc = false">Cancelar</button>
+            <button class="btn-solid" (click)="guardarNuevoDocumento()">Vectorizar e Indexar</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>

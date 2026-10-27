@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AgroBusca.Api/AgroBusca.Api.csproj" />
+  <Project Path="AgroBusca.Tests/AgroBusca.Tests.csproj" />
+</Solution>
